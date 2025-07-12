@@ -1,0 +1,271 @@
+/* ✅ Reset all padding, margin, and set box-border */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  font-family: sans-serif;
+  overflow: hidden;
+  font-size: 13px; /* ↓ from default */
+}
+
+#toggleSidebar.show {
+  display: block;
+}
+
+
+#sidebar {
+  position: relative;
+  width: 250px;
+  height: calc(100vh - 40px);
+  min-width: 250px;
+  max-width: 250px;
+  flex-shrink: 0; /*prevent shrinking */
+  background-color: #2d2d2d;
+  color: white;
+  left: 0px;
+  transition: width 0.3s ease;
+}
+
+#sidebar.hidden {
+  width: 0;
+  min-width: 0;
+  max-width: 0
+}
+
+#sidebar:not(.hidden) + #toggleSidebar.show {
+  display: none;
+}
+
+.sidebar-toggle-tab {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  width: 30px;
+  height: 30px;
+  background-color: #444;
+  color: white;
+  border-radius: 0 5px 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  font-size: 18px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Auto-hide sidebar on small screens */
+@media (max-width: 768px) {
+  #sidebar {
+    width: 0;
+    min-width: 0;
+    max-width: 0;
+    /*overflow: hidden;*/
+    /*left: -250px;*/
+  }
+
+  #sidebar:not(.hidden) {
+    left: 0px;
+    width: 250px;
+    min-width: 250px;
+    max-width: 250px;
+  }
+}
+
+#treeScrollArea {
+  display: flex;
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease;
+  overflow: hidden;
+  min-width: 0; /*allows child elements*/
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: #1f1f1f;
+  padding: 6px 10px;
+  color: white;
+  font-size: 13px;
+  height: 50px;
+}
+
+.toolbar button {
+  background: #3a3a3a;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: no-wrap;
+}
+
+.toolbar button:hover {
+  background: #555;
+}
+
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  background: #222;
+  color: white;
+  min-height: 30px;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  cursor: pointer;
+  position: relative;
+  background: #222;
+  font-size: 13px;
+}
+
+.tab.active {
+  background: #444;
+}
+
+.tab .close-btn {
+  color: #aaa;
+  margin-left: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tab .close-btn:hover {
+  color: #fff;
+}
+
+.tab .unsaved-indicator {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.editor-container {
+  flex: 1;
+  height: 100%;
+}
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.folder {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 10px;
+  cursor: pointer;
+  user-select: none;
+  background: none;
+  transition: background 0.2s;
+}
+
+.folder.active {
+  background-color: #555;
+}
+
+.folder-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-grow: 1;
+}
+
+.folder-tools {
+  display: none;
+  gap: 6px;
+}
+
+.folder.active .folder-tools {
+  display: flex;
+}
+
+.folder-tools button {
+  background: #444;
+  color: white;
+  border: none;
+  padding: 2px 6px;
+  font-size: 11px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.folder-tools button:hover {
+  background: #666;
+}
+
+.folder-toggle {
+  cursor: pointer;
+  margin-right: 4px;
+}
+
+.folder:hover, .file:hover {
+  background-color: #444;
+}
+
+.tree-icon {
+  width: 1em;
+  display: inline-block;
+}
+
+.root-tools {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #2d2d2d;
+  border-bottom: 1px solid #444;
+  height: 50px;
+}
+
+.root-tools button {
+  background: #444;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.root-tools button:hover {
+  background: #666;
+}
+
+.CodeMirror {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+}
