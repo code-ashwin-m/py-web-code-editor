@@ -228,15 +228,35 @@ function renderTree(items, parent) {
       const el = document.createElement("div");
       el.className = "file";
 
-      const icon = document.createElement("span");
-      icon.className = "tree-icon codicon codicon-file-code";
+      const iconEl = document.createElement("span");
+      const { icon, color } = getFileIconInfo(item.name);
+      
+      iconEl.className = `tree-icon codicon ${icon} ${color}`;
       // icon.innerText = "📄";
 
       const name = document.createElement("span");
       name.innerText = item.name;
 
-      el.appendChild(icon);
+      const status = document.createElement("span");
+      status.className = "git-status";
+      
+      if (item.git_status === "modified") {
+        status.innerText = "M";
+        status.classList.add("modified");
+      } else if (item.git_status === "added" || item.git_status === "untracked") {
+        status.innerText = "A";
+        status.classList.add("added");
+      } else if (item.git_status === "deleted") {
+        status.innerText = "D";
+        status.classList.add("deleted");
+      } else {
+        status.style.display = "none";
+      }
+
+ 
+      el.appendChild(iconEl);
       el.appendChild(name);
+      el.appendChild(status);
       parent.appendChild(el);
 
 
@@ -330,6 +350,29 @@ function getModeForFile(filename) {
     case 'sh': return 'shell';
     case 'txt': return 'null'; // plain text
     default: return 'null';
+  }
+}
+
+function getFileIconInfo(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  switch (ext) {
+    case 'js': return { icon: 'codicon-symbol-variable', color: 'icon-yellow' };
+    case 'ts': return { icon: 'codicon-symbol-namespace', color: 'icon-blue' };
+    case 'json': return { icon: 'codicon-json', color: 'icon-orange' };
+    case 'py': return { icon: 'codicon-symbol-function', color: 'icon-green' };
+    case 'html': return { icon: 'codicon-code', color: 'icon-orange' };
+    case 'css': return { icon: 'codicon-symbol-key', color: 'icon-purple' };
+    case 'md': return { icon: 'codicon-markdown', color: 'icon-gray' };
+    case 'sh': return { icon: 'codicon-terminal', color: 'icon-gray' };
+    case 'yml':
+    case 'yaml': return { icon: 'codicon-settings', color: 'icon-purple' };
+    case 'txt': return { icon: 'codicon-text-size', color: 'icon-white' };
+    case 'xml': return { icon: 'codicon-file-code', color: 'icon-gray' };
+    case 'sql': return { icon: 'codicon-database', color: 'icon-red' };
+    case 'java': return { icon: 'codicon-symbol-class', color: 'icon-red' };
+    case 'c':
+    case 'cpp': return { icon: 'codicon-symbol-structure', color: 'icon-blue' };
+    default: return { icon: 'codicon-file', color: 'icon-white' };
   }
 }
 

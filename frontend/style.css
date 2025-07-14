@@ -10,6 +10,15 @@
   /* fallback */
 }
 
+.icon-yellow { color: #dcdcaa; }
+.icon-blue { color: #569cd6; }
+.icon-green { color: #6a9955; }
+.icon-purple { color: #c586c0; }
+.icon-orange { color: #ce9178; }
+.icon-red { color: #f44747; }
+.icon-gray { color: #cccccc; }
+.icon-white { color: #ffffff; }
+
 html,
 body {
   overflow-x: hidden;
@@ -295,4 +304,27 @@ body {
     min-width: 250px;
     max-width: 250px;
   }
+}
+
+.git-status {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.git-status.modified {
+  background: #f0ad4e; /* yellow */
+  color: black;
+}
+
+.git-status.added {
+  background: #5cb85c; /* green */
+  color: white;
+}
+
+.git-status.deleted {
+  background: #d9534f; /* red */
+  color: white;
 }
