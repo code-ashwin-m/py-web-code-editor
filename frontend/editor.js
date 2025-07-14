@@ -49,9 +49,10 @@ function addTab(filename, content) {
   container.style.height = "100%";
   document.getElementById("editor").appendChild(container);
 
+  const mode = getModeForFile(filename);
   const editor = CodeMirror(container, {
     value: content,
-    mode: "python",
+    mode: mode,
     theme: "material",
     lineNumbers: true
   });
@@ -136,12 +137,12 @@ function renderTree(items, parent) {
       label.className = "folder-label";
 
       const toggleIcon = document.createElement("span");
-      toggleIcon.className = "folder-toggle";
-      toggleIcon.innerText = "▶";
+      toggleIcon.className = "codicon codicon-chevron-right folder-toggle";
+      // toggleIcon.innerText = "▶";
 
       const icon = document.createElement("span");
-      icon.className = "tree-icon";
-      icon.innerText = "📁";
+      icon.className = "tree-icon codicon codicon-folder";
+      // icon.innerText = "📁";
 
       const name = document.createElement("span");
       name.innerText = item.name;
@@ -155,7 +156,7 @@ function renderTree(items, parent) {
       tools.className = "folder-tools";
 
       const btnNewFile = document.createElement("button");
-      btnNewFile.innerText = "+File";
+      btnNewFile.innerHTML = `<span class="codicon codicon-new-file"></span>`;
 
       btnNewFile.onclick = async (e) => {
         e.stopPropagation();
@@ -177,7 +178,7 @@ function renderTree(items, parent) {
 
 
       const btnNewFolder = document.createElement("button");
-      btnNewFolder.innerText = "+Folder";
+      btnNewFolder.innerHTML = `<span class="codicon codicon-new-folder"></span>`;
       btnNewFolder.onclick = async (e) => {
         e.stopPropagation();
         const name = prompt("Enter new folder name:");
@@ -217,7 +218,8 @@ function renderTree(items, parent) {
       label.onclick = () => {
         const isOpen = childrenContainer.style.display === "block";
         childrenContainer.style.display = isOpen ? "none" : "block";
-        toggleIcon.innerText = isOpen ? "▶" : "▼";
+        toggleIcon.className = isOpen ? "codicon codicon-chevron-right folder-toggle": "codicon codicon-chevron-down folder-toggle";
+        // toggleIcon.innerText = isOpen ? "▶" : "▼";
         activateFolder(header);
       };
     }
@@ -227,8 +229,8 @@ function renderTree(items, parent) {
       el.className = "file";
 
       const icon = document.createElement("span");
-      icon.className = "tree-icon";
-      icon.innerText = "📄";
+      icon.className = "tree-icon codicon codicon-file-code";
+      // icon.innerText = "📄";
 
       const name = document.createElement("span");
       name.innerText = item.name;
@@ -315,6 +317,22 @@ function isMobileView() {
   return window.innerWidth <= 768;
 }
 
+function getModeForFile(filename) {
+  const ext = filename.split('.').pop().toLowerCase();
+  switch (ext) {
+    case 'py': return 'python';
+    case 'js': return 'javascript';
+    case 'html': return 'htmlmixed';
+    case 'css': return 'css';
+    case 'json': return { name: 'javascript', json: true };
+    case 'xml': return 'xml';
+    case 'md': return 'markdown';
+    case 'sh': return 'shell';
+    case 'txt': return 'null'; // plain text
+    default: return 'null';
+  }
+}
+
 window.onload = () => {
   loadTree();
 
@@ -358,3 +376,14 @@ window.onload = () => {
   };
 
 };
+
+function setFullHeight() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+  document.querySelectorAll('.full-height').forEach(el => {
+    el.style.height = `calc(var(--vh, 1vh) * 100)`;
+  });
+}
+
+window.addEventListener("load", setFullHeight);
+window.addEventListener("resize", setFullHeight);

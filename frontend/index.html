@@ -8,10 +8,13 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material.css">
   <!-- CodeMirror hinting addon -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.css">
+
+  <link href="https://cdn.jsdelivr.net/npm/@vscode/codicons/dist/codicon.css" rel="stylesheet" />
+  
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body class="full-height">
 
   <div id="sidebar">
     <div id="rootTools" class="folder-tools root-tools">
@@ -24,7 +27,7 @@
     <div id="toggleSidebar" class="sidebar-toggle-tab">☰</div>
   </div>
 
-  <div id="main">
+  <div id="main" class="full-height">
     <div class="toolbar">
       <button id="saveBtn">Save</button>
       <button id="saveAllBtn">Save All</button>
@@ -37,6 +40,12 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/anyword-hint.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/python/python.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/javascript/javascript.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/css/css.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/shell/shell.js"></script>
   <script src="editor.js"></script>
 </body>
 

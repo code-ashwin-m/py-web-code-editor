@@ -5,6 +5,11 @@
   box-sizing: border-box;
 }
 
+.full-height {
+  height: 100vh;
+  /* fallback */
+}
+
 html,
 body {
   overflow-x: hidden;
@@ -69,8 +74,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  transition: margin-left 0.3s ease;
-  overflow: hidden;
+  height: 100%;
   min-width: 0;
 }
 
@@ -144,15 +148,13 @@ body {
 /* Editor container */
 .editor-container {
   flex: 1;
-  height: 100%;
   overflow: hidden;
+  position: relative;
 }
 
-.CodeMirror {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  font-size: 14px;
+.CodeMirror,
+.CodeMirror-scroll {
+  height: 100% !important;
 }
 
 /* Tree View Styling */
@@ -162,68 +164,65 @@ body {
   height: 100%;
 }
 
-.root-tools {
+#treeView {
+  font-size: 13px;
+  color: #cccccc;
+  background-color: #1e1e1e;
+  padding: 5px 10px;
+  height: 100%;
+  overflow-y: auto;
+  user-select: none;
+}
+
+.tree-icon,
+.folder-toggle {
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.file,
+.folder {
   display: flex;
-  justify-content: flex-end;
-  gap: 6px;
-  padding: 6px 10px;
-  background: #2d2d2d;
-  border-bottom: 1px solid #444;
-  height: 50px;
-}
-
-.root-tools button {
-  background: #444;
-  color: white;
-  border: none;
-  padding: 6px 10px;
-  font-size: 12px;
-  border-radius: 4px;
+  align-items: center;
+  padding: 4px 10px;
   cursor: pointer;
-}
-
-.root-tools button:hover {
-  background: #666;
+  border-radius: 3px;
+  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .file {
-  display: flex;
-  align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  cursor: pointer;
-  user-select: none;
 }
 
 .folder {
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 4px 10px;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.2s;
 }
 
 .folder:hover,
 .file:hover {
-  background-color: #444;
+  background-color: #2a2d2e;
 }
 
 .folder.active {
-  background-color: #555;
+  background-color: #094771;
+  color: white;
 }
 
 .folder-label {
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-grow: 1;
+  flex: 1; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .folder-tools {
   display: none;
-  gap: 6px;
+  gap: 4px;
 }
 
 .folder.active .folder-tools {
@@ -231,27 +230,56 @@ body {
 }
 
 .folder-tools button {
-  background: #444;
+  background: #3a3d41;
   color: white;
   border: none;
-  padding: 2px 6px;
   font-size: 11px;
-  border-radius: 4px;
+  border-radius: 3px;
   cursor: pointer;
+  height: 16px;
 }
 
 .folder-tools button:hover {
-  background: #666;
+  background: #555;
 }
 
 .folder-toggle {
-  cursor: pointer;
-  margin-right: 4px;
+  font-size: 10px;
+  width: 12px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 2px;
+  color: #bbbbbb;
 }
 
 .tree-icon {
-  width: 1em;
-  display: inline-block;
+  width: 16px;
+  text-align: center;
+}
+
+.root-tools {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 10px;
+  background-color: #252526;
+  border-bottom: 1px solid #333;
+  height: 40px;
+  gap: 6px;
+}
+
+.root-tools button {
+  background: #3a3d41;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  height: 28px;
+}
+
+.root-tools button:hover {
+  background: #555; 
 }
 
 /* Responsive: auto collapse sidebar on mobile */
