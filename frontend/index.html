@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Code Editor</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material.css">
   <!-- CodeMirror hinting addon -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.css">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
   <div id="sidebar">
     <div id="rootTools" class="folder-tools root-tools">
-  <button id="rootNewFile">+File</button>
-  <button id="rootNewFolder">+Folder</button>
-</div>
+      <button id="rootNewFile">+File</button>
+      <button id="rootNewFolder">+Folder</button>
+    </div>
     <div id="treeScrollArea">
-    <div id="treeView"></div>
+      <div id="treeView"></div>
     </div>
     <div id="toggleSidebar" class="sidebar-toggle-tab">☰</div>
   </div>
@@ -33,8 +35,9 @@
 
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/anyword-hint.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/anyword-hint.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/python/python.js"></script>
   <script src="editor.js"></script>
 </body>
+
 </html>

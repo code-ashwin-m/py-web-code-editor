@@ -1,3 +1,4 @@
+
 let currentEditor;
 let editors = {};
 let tabs = {};
@@ -54,17 +55,17 @@ function addTab(filename, content) {
     theme: "material",
     lineNumbers: true
   });
-  
-  editor.on("inputRead", function(cm, change) {
-  if (change.text[0].match(/[\w.]/)) {
-    cm.showHint({ completeSingle: false });
-  }
-});
-  editor.setOption("extraKeys", {
-  "Ctrl-Space": "autocomplete"
-});
 
-editor.getWrapperElement().style.fontSize = "12px";
+  editor.on("inputRead", function (cm, change) {
+    if (change.text[0].match(/[\w.]/)) {
+      cm.showHint({ completeSingle: false });
+    }
+  });
+  editor.setOption("extraKeys", {
+    "Ctrl-Space": "autocomplete"
+  });
+
+  editor.getWrapperElement().style.fontSize = "12px";
 
   const tabData = { tab, editor, container, indicator, original: content };
   tabs[filename] = tabData;
@@ -115,7 +116,7 @@ function loadFile(path) {
 }
 
 function renderTree(items, parent) {
-// Sort: folders first, then files — each alphabetically
+  // Sort: folders first, then files — each alphabetically
   items.sort((a, b) => {
     if (a.type === b.type) {
       return a.name.localeCompare(b.name);
@@ -123,7 +124,7 @@ function renderTree(items, parent) {
     return a.type === "folder" ? -1 : 1;
   });
 
-  
+
   items.forEach(item => {
     if (item.type === "folder") {
       const wrapper = document.createElement("div");
@@ -155,45 +156,45 @@ function renderTree(items, parent) {
 
       const btnNewFile = document.createElement("button");
       btnNewFile.innerText = "+File";
-      
+
       btnNewFile.onclick = async (e) => {
-  e.stopPropagation();
-  const name = prompt("Enter new file name:");
-  if (name && name.trim()) {
-    const res = await fetch("/api/create-file", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: item.path, name })
-    });
-    const result = await res.json();
-    if (result.success) {
-      loadTree(); // refresh view
-    } else {
-      alert("Error: " + result.error);
-    }
-  }
-};
+        e.stopPropagation();
+        const name = prompt("Enter new file name:");
+        if (name && name.trim()) {
+          const res = await fetch("/api/create-file", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ path: item.path, name })
+          });
+          const result = await res.json();
+          if (result.success) {
+            loadTree(); // refresh view
+          } else {
+            alert("Error: " + result.error);
+          }
+        }
+      };
 
 
       const btnNewFolder = document.createElement("button");
       btnNewFolder.innerText = "+Folder";
       btnNewFolder.onclick = async (e) => {
-  e.stopPropagation();
-  const name = prompt("Enter new folder name:");
-  if (name && name.trim()) {
-    const res = await fetch("/api/create-folder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: item.path, name })
-    });
-    const result = await res.json();
-    if (result.success) {
-      loadTree(); // refresh view
-    } else {
-      alert("Error: " + result.error);
-    }
-  }
-};
+        e.stopPropagation();
+        const name = prompt("Enter new folder name:");
+        if (name && name.trim()) {
+          const res = await fetch("/api/create-folder", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ path: item.path, name })
+          });
+          const result = await res.json();
+          if (result.success) {
+            loadTree(); // refresh view
+          } else {
+            alert("Error: " + result.error);
+          }
+        }
+      };
 
       tools.appendChild(btnNewFile);
       tools.appendChild(btnNewFolder);
@@ -236,7 +237,15 @@ function renderTree(items, parent) {
       el.appendChild(name);
       parent.appendChild(el);
 
-      el.onclick = () => loadFile(item.path);
+
+      el.onclick = () => {
+        loadFile(item.path); // existing logic
+
+        // Auto-hide sidebar on mobile
+        if (isMobileView()) {
+          //document.getElementById("sidebar").classList.add("hidden");
+        }
+      };
     }
   });
 }
@@ -302,6 +311,10 @@ function activateFolder(selected) {
   selected.classList.toggle("active");
 }
 
+function isMobileView() {
+  return window.innerWidth <= 768;
+}
+
 window.onload = () => {
   loadTree();
 
@@ -311,37 +324,37 @@ window.onload = () => {
   }
 
   document.getElementById("rootNewFile").onclick = async () => {
-  const name = prompt("Enter new file name:");
-  if (name && name.trim()) {
-    const res = await fetch("/api/create-file", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: "/", name })
-    });
-    const result = await res.json();
-    if (result.success) {
-      loadTree();
-    } else {
-      alert("Error: " + result.error);
+    const name = prompt("Enter new file name:");
+    if (name && name.trim()) {
+      const res = await fetch("/api/create-file", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: "/", name })
+      });
+      const result = await res.json();
+      if (result.success) {
+        loadTree();
+      } else {
+        alert("Error: " + result.error);
+      }
     }
-  }
-};
+  };
 
-document.getElementById("rootNewFolder").onclick = async () => {
-  const name = prompt("Enter new folder name:");
-  if (name && name.trim()) {
-    const res = await fetch("/api/create-folder", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ path: "/", name })
-    });
-    const result = await res.json();
-    if (result.success) {
-      loadTree();
-    } else {
-      alert("Error: " + result.error);
+  document.getElementById("rootNewFolder").onclick = async () => {
+    const name = prompt("Enter new folder name:");
+    if (name && name.trim()) {
+      const res = await fetch("/api/create-folder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ path: "/", name })
+      });
+      const result = await res.json();
+      if (result.success) {
+        loadTree();
+      } else {
+        alert("Error: " + result.error);
+      }
     }
-  }
-};
+  };
 
 };
