@@ -127,6 +127,7 @@ function renderTree(items, parent) {
 
 
   items.forEach(item => {
+    
     if (item.type === "folder") {
       const wrapper = document.createElement("div");
 
@@ -206,22 +207,45 @@ function renderTree(items, parent) {
 
       // Children
       const childrenContainer = document.createElement("div");
-      childrenContainer.style.paddingLeft = "20px";
+      childrenContainer.classList.add("children");
       childrenContainer.style.display = "none";
 
       wrapper.appendChild(childrenContainer);
       parent.appendChild(wrapper);
 
-      renderTree(item.children, childrenContainer);
+      //renderTree(item.children, childrenContainer);
 
       // Expand/collapse + activate
       label.onclick = () => {
         const isOpen = childrenContainer.style.display === "block";
-        childrenContainer.style.display = isOpen ? "none" : "block";
-        toggleIcon.className = isOpen ? "codicon codicon-chevron-right folder-toggle": "codicon codicon-chevron-down folder-toggle";
-        // toggleIcon.innerText = isOpen ? "▶" : "▼";
+
+       if (!isOpen) {
+         toggleIcon.className = "codicon codicon-chevron-down folder-toggle";
+         childrenContainer.style.display = "block";
+		  // Lazy load only if not already loaded
+         if (!childrenContainer.hasChildNodes()) {
+           const rootPath = localStorage.getItem("treeRoot");
+        
+           fetch("/api/tree", {
+             method: "POST",
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify({
+               path: item.path,
+               root: rootPath
+             })
+	        })
+	        .then(res => res.json())
+	        .then(data => {
+             renderTree(data, childrenContainer);
+           });
+         }
+       } else {
+         toggleIcon.className = "codicon codicon-chevron-right folder-toggle";
+         childrenContainer.style.display = "none";
+       }
+
         activateFolder(header);
-      };
+      }
     }
 
     if (item.type === "file") {
@@ -272,13 +296,31 @@ function renderTree(items, parent) {
   });
 }
 
-function loadTree() {
-  fetch("/api/tree")
-    .then(res => res.json())
-    .then(data => {
+function loadTree(rootPath = "") {
+  fetch("/api/tree", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          path: rootPath,
+          root: rootPath
+        })
+	 })
+	 .then(res => res.json())
+	 .then(data => {
       const treeView = document.getElementById("treeView");
       treeView.innerHTML = "";
       renderTree(data, treeView);
+    });
+}
+
+function loadBranchInfo(rootPath) {
+  fetch(`/api/branch/${rootPath}`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("branch-info").innerText = data.branch;
+    })
+    .catch(() => {
+      document.getElementById("branch-info").innerText = "unknown";
     });
 }
 
@@ -376,9 +418,69 @@ function getFileIconInfo(filename) {
   }
 }
 
-window.onload = () => {
-  loadTree();
+function loadFolders(path = "") {
+  fetch("/api/folders", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ path: path })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const body = document.getElementById("folderPickerBody");
+    body.innerHTML = "";
 
+    if (path) {
+      const upRow = document.createElement("div");
+      upRow.className = "m-folder-row";
+      upRow.innerHTML = `<div class="folder-label">🔼 ..</div>`;
+      upRow.onclick = () => {
+        const upPath = path.split("/").slice(0, -1).join("/");
+        loadFolders(upPath);
+      };
+      body.appendChild(upRow);
+    }
+
+    data.folders.forEach(folder => {
+      const row = document.createElement("div");
+      row.className = "m-folder-row";
+
+      const label = document.createElement("div");
+      label.className = "m-folder-label";
+      label.innerHTML = `📁 ${folder.name}`;
+
+      const actions = document.createElement("div");
+      actions.className = "m-folder-actions";
+
+      const selectBtn = document.createElement("button");
+      selectBtn.innerText = "Select";
+      selectBtn.onclick = (e) => {
+        e.stopPropagation();
+        setTreeRoot(folder.path);
+        closeFolderPicker();
+      };
+
+      row.onclick = () => loadFolders(folder.path);
+
+      actions.appendChild(selectBtn);
+      row.appendChild(label);
+      row.appendChild(actions);
+      body.appendChild(row);
+    });
+  });
+}
+
+function setTreeRoot(path) {
+  localStorage.setItem("treeRoot", path);
+  loadTree(path);
+  loadBranchInfo(path)
+}
+
+window.onload = () => {
+  const rootPath = localStorage.getItem("treeRoot");
+  
+  loadTree(rootPath);
+  loadBranchInfo(rootPath);
+  
   // Auto-collapse sidebar on small screens
   if (window.innerWidth <= 768) {
     document.getElementById("sidebar").classList.add("hidden");
@@ -417,8 +519,22 @@ window.onload = () => {
       }
     }
   };
-
+  
+  document.getElementById("browseBtn").onclick = () => {
+    const modal = document.getElementById("folderPickerModal");
+    modal.classList.remove("hidden");
+    loadFolders("");
+    
+  };
+  
+  document.getElementById("closeBrowseBtn").onclick = () => {
+    closeFolderPicker();
+  };
 };
+
+function closeFolderPicker(){
+  document.getElementById("folderPickerModal").classList.add("hidden");
+}
 
 function setFullHeight() {
   const vh = window.innerHeight * 0.01;

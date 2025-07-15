@@ -17,7 +17,7 @@
 
 <body class="full-height">
 
-  <div id="sidebar">
+  <div id="sidebar" class="full-height">
     <div id="rootTools" class="folder-tools root-tools">
       <button id="rootNewFile">+File</button>
       <button id="rootNewFolder">+Folder</button>
@@ -30,13 +30,37 @@
 
   <div id="main" class="full-height">
     <div class="toolbar">
+      <button id="browseBtn">Select Folder</button>
       <button id="saveBtn">Save</button>
       <button id="saveAllBtn">Save All</button>
     </div>
     <div class="tabs" id="tabs"></div>
     <div class="editor-container" id="editor"></div>
   </div>
+  <div id="statusbar">
+    <div class="status-left">
+      <div class="status-item branch">
+        <i class="codicon codicon-git-branch"></i>
+        <span id="branch-info">loading...</span></div>
+    </div>
+    <div class="status-right">
+      <!-- Add more items here later -->
+    </div>
+  </div>
 
+  <!-- Modal -->
+<div id="folderPickerModal" class="vscode-modal hidden">
+  <div class="vscode-modal-content">
+    <div class="vscode-modal-header">
+      <span>Select Folder</span>
+      <button id="closeBrowseBtn">✖</button>
+    </div>
+    <div class="vscode-modal-body" id="folderPickerBody">
+      <!-- Dynamic folder list here -->
+    </div>
+  </div>
+</div>
+  
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/anyword-hint.js"></script>
