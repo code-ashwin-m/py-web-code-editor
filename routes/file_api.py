@@ -3,12 +3,21 @@ import os
 
 file_api_bp = Blueprint("file_api", __name__)
 
-ROOT_DIR = "/mnt/server_sdcard/Python"  # Update as per your base directory
+ROOT_DIR = "/mnt/server_sdcard"  # Update as per your base directory
 
 @file_api_bp.route("/api/create-file", methods=["POST"])
 def create_file():
     data = request.get_json()
-    path = os.path.join(ROOT_DIR, data["path"], data["name"])
+    data_path = data.get("path", "")
+    data_root = data.get("root", "")
+    if data_path != "/":
+      root = os.path.join(ROOT_DIR, data_path)
+    else:
+      root = os.path.join(ROOT_DIR, data_root)
+    path = os.path.join(root, data["name"])
+    
+    #return jsonify({"success": False, "error": path}), 400
+    #print(f"path: {path}")
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "x") as f:  # Avoid overwrite
@@ -22,7 +31,17 @@ def create_file():
 @file_api_bp.route("/api/create-folder", methods=["POST"])
 def create_folder():
     data = request.get_json()
-    path = os.path.join(ROOT_DIR, data["path"], data["name"])
+    data_path = data.get("path", "")
+    data_root = data.get("root", "")
+    if data_path != "/":
+      root = os.path.join(ROOT_DIR, data_path)
+    else:
+      root = os.path.join(ROOT_DIR, data_root)
+    path = os.path.join(root, data["name"])
+    
+    #return jsonify({"success": False, "error": path}), 400
+  
+    print(f"path: {path}")
     try:
         os.makedirs(path, exist_ok=False)
         return jsonify({"success": True})

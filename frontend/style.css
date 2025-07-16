@@ -161,7 +161,10 @@ body {
   flex: 1;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
+
 
 .CodeMirror,
 .CodeMirror-scroll {

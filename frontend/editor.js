@@ -163,14 +163,18 @@ function renderTree(items, parent) {
         e.stopPropagation();
         const name = prompt("Enter new file name:");
         if (name && name.trim()) {
+          const rootPath = localStorage.getItem("treeRoot");
           const res = await fetch("/api/create-file", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ path: item.path, name })
+            body: JSON.stringify({ 
+              path: item.path, name,
+              root: rootPath
+            })
           });
           const result = await res.json();
           if (result.success) {
-            loadTree(); // refresh view
+            loadTree(rootPath); // refresh view
           } else {
             alert("Error: " + result.error);
           }
@@ -184,14 +188,18 @@ function renderTree(items, parent) {
         e.stopPropagation();
         const name = prompt("Enter new folder name:");
         if (name && name.trim()) {
+          const rootPath = localStorage.getItem("treeRoot");
           const res = await fetch("/api/create-folder", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ path: item.path, name })
+            body: JSON.stringify({ 
+              path: item.path, name,
+              root: rootPath
+            })
           });
           const result = await res.json();
           if (result.success) {
-            loadTree(); // refresh view
+            loadTree(rootPath); // refresh view
           } else {
             alert("Error: " + result.error);
           }
@@ -410,11 +418,12 @@ function getFileIconInfo(filename) {
     case 'yaml': return { icon: 'codicon-settings', color: 'icon-purple' };
     case 'txt': return { icon: 'codicon-text-size', color: 'icon-white' };
     case 'xml': return { icon: 'codicon-file-code', color: 'icon-gray' };
+    case 'db':
     case 'sql': return { icon: 'codicon-database', color: 'icon-red' };
     case 'java': return { icon: 'codicon-symbol-class', color: 'icon-red' };
     case 'c':
     case 'cpp': return { icon: 'codicon-symbol-structure', color: 'icon-blue' };
-    default: return { icon: 'codicon-file', color: 'icon-white' };
+    default: return { icon: 'codicon-file', color: 'icon-gray' };
   }
 }
 
@@ -489,14 +498,18 @@ window.onload = () => {
   document.getElementById("rootNewFile").onclick = async () => {
     const name = prompt("Enter new file name:");
     if (name && name.trim()) {
+      const rootPath = localStorage.getItem("treeRoot");
       const res = await fetch("/api/create-file", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path: "/", name })
+        body: JSON.stringify({ 
+          path: "/", name,
+          root: rootPath
+        })
       });
       const result = await res.json();
       if (result.success) {
-        loadTree();
+        loadTree(rootPath);
       } else {
         alert("Error: " + result.error);
       }
@@ -506,14 +519,18 @@ window.onload = () => {
   document.getElementById("rootNewFolder").onclick = async () => {
     const name = prompt("Enter new folder name:");
     if (name && name.trim()) {
+      const rootPath = localStorage.getItem("treeRoot");
       const res = await fetch("/api/create-folder", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ path: "/", name })
+        body: JSON.stringify({ 
+          path: "/", name,
+          root: rootPath
+        })
       });
       const result = await res.json();
       if (result.success) {
-        loadTree();
+        loadTree(rootPath);
       } else {
         alert("Error: " + result.error);
       }

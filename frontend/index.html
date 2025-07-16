@@ -1,24 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>Code Editor</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material.css">
-  <!-- CodeMirror hinting addon -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.css">
 
-  <link href="https://cdn.jsdelivr.net/npm/@vscode/codicons/dist/codicon.css" rel="stylesheet" />
-  
-  <link rel="stylesheet" href="style.css">
+  <!-- CodeMirror Core + Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/theme/material.css" />
+
+  <!-- CodeMirror Hinting -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.css" />
+
+  <!-- VSCode Codicons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@vscode/codicons/dist/codicon.css" />
+
+  <!-- App Style -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body class="full-height">
 
+  <!-- Sidebar -->
   <div id="sidebar" class="full-height">
-    <div id="rootTools" class="folder-tools root-tools">
+    <div class="folder-tools root-tools">
       <button id="rootNewFile">+File</button>
       <button id="rootNewFolder">+Folder</button>
     </div>
@@ -28,42 +34,49 @@
     <div id="toggleSidebar" class="sidebar-toggle-tab">☰</div>
   </div>
 
+  <!-- Main Panel -->
   <div id="main" class="full-height">
     <div class="toolbar">
       <button id="browseBtn">Select Folder</button>
       <button id="saveBtn">Save</button>
       <button id="saveAllBtn">Save All</button>
     </div>
-    <div class="tabs" id="tabs"></div>
-    <div class="editor-container" id="editor"></div>
+    <div id="tabs" class="tabs"></div>
+    <div id="editor" class="editor-container"></div>
   </div>
+
+  <!-- Status Bar -->
   <div id="statusbar">
     <div class="status-left">
       <div class="status-item branch">
         <i class="codicon codicon-git-branch"></i>
-        <span id="branch-info">loading...</span></div>
+        <span id="branch-info">loading...</span>
+      </div>
     </div>
     <div class="status-right">
-      <!-- Add more items here later -->
+      <!-- Reserved for future status indicators -->
     </div>
   </div>
 
-  <!-- Modal -->
-<div id="folderPickerModal" class="vscode-modal hidden">
-  <div class="vscode-modal-content">
-    <div class="vscode-modal-header">
-      <span>Select Folder</span>
-      <button id="closeBrowseBtn">✖</button>
-    </div>
-    <div class="vscode-modal-body" id="folderPickerBody">
-      <!-- Dynamic folder list here -->
+  <!-- Folder Picker Modal -->
+  <div id="folderPickerModal" class="vscode-modal hidden">
+    <div class="vscode-modal-content">
+      <div class="vscode-modal-header">
+        <span>Select Folder</span>
+        <button id="closeBrowseBtn">✖</button>
+      </div>
+      <div class="vscode-modal-body" id="folderPickerBody">
+        <!-- Populated dynamically -->
+      </div>
     </div>
   </div>
-</div>
-  
+
+  <!-- CodeMirror Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/lib/codemirror.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/show-hint.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/addon/hint/anyword-hint.js"></script>
+
+  <!-- Supported Language Modes -->
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/python/python.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/javascript/javascript.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/css/css.js"></script>
@@ -71,6 +84,8 @@
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/xml/xml.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/markdown/markdown.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/codemirror@5/mode/shell/shell.js"></script>
+
+  <!-- Editor Logic -->
   <script src="editor.js"></script>
 </body>
 
